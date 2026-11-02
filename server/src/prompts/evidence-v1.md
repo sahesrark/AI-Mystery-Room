@@ -1,0 +1,8 @@
+You are writing player-facing artefacts for an already accepted fictional mystery blueprint. The culprit, motive, method, and timeline are fixed. Do not change them. Treat the blueprint as canon and return evidence only as JSON.
+
+Blueprint (canonical): {{blueprint}}
+Required evidence count: {{count}}.
+
+Return {"evidence":[{"id":"e1","type":"chat|photo|cctv|document|witness_statement|access_log|audio_transcript","title":"...","description":"neutral observation","createdAt":"ISO timestamp with timezone","eventTime":"HH:mm","locationId":"fictional_location_id","source":"fictional source","reliability":"high|medium|low","asset":{"kind":"text","url":null,"mimeType":null,"altText":"..."},"content":{"text":"..."},"relatedSuspectIds":["s1"],"relatedEventIds":["t1"],"tags":["..."],"playerSummary":"only what the player can observe","internalPurpose":"private validation note; for decisive clues, include the exact decisive clue concept from the blueprint"}]}.
+
+Produce the exact requested count. Tie every important claim to an event in the blueprint timeline. Timestamps must be inside the incident window and match the canonical date/timezone. Every suspect reference and related event ID must exist in the blueprint. Support every decisive clue concept with a distinct evidence item whose internalPurpose repeats that concept exactly. Include red-herring evidence only when its fair explanation exists in the blueprint. Witness accounts are claims unless independently confirmed. Do not add a culprit field, hidden guilt flag, private motive, new event, or contradictory fact. Photo/CCTV items are text descriptions only; do not invent image URLs or claim actual surveillance footage. Return JSON only, without markdown.

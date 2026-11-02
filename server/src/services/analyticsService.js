@@ -1,0 +1,3 @@
+const ALLOWED=new Set(['case_creation_started','case_generation_succeeded','case_generation_failed','case_opened','evidence_opened','evidence_bookmarked','timeline_opened','accusation_submitted','reveal_opened']);
+/** Structured, content-free event log. Never pass scenarios, notes, user IDs, or solution data. */
+export function trackEvent(event,properties={}){if(!ALLOWED.has(event))return;const safe={event,at:new Date().toISOString()};if(typeof properties.difficulty==='string')safe.difficulty=properties.difficulty;if(typeof properties.evidenceType==='string')safe.evidenceType=properties.evidenceType;if(typeof properties.isCorrect==='boolean')safe.isCorrect=properties.isCorrect;console.info(JSON.stringify(safe));}

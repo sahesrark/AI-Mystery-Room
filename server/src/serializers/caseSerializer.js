@@ -1,0 +1,4 @@
+export function safeCase(c){const {_id,solution,generation,ownerId,accused,result,caseId,...rest}=c;return {...rest,evidence:(rest.evidence||[]).map(safeEvidence),id:caseId||c.id||_id};}
+const PRIVATE_KEYS=new Set(['solution','hiddensolution','culpritsuspectid','isculprit','internalpurpose','privatemotive','hiddenreasoning','hiddenrationale','generationprompt','prompt','modelresponse','validationdiagnostics','suspicionscore']);
+function stripPrivate(value){if(Array.isArray(value))return value.map(stripPrivate);if(!value||typeof value!=='object')return value;return Object.fromEntries(Object.entries(value).filter(([key])=>!PRIVATE_KEYS.has(key.toLowerCase().replaceAll('_','').replaceAll('-',''))).map(([key,item])=>[key,stripPrivate(item)]));}
+export function safeEvidence(e){const {internalPurpose,...safe}=e;return stripPrivate(safe);}

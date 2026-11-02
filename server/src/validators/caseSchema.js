@@ -1,0 +1,7 @@
+import { z } from 'zod';
+export const caseRequestSchema = z.object({ scenario: z.string().trim().min(30).max(1000), genre: z.string().max(80).optional(), difficulty: z.enum(['easy','medium','hard']).default('medium'), evidenceIntensity: z.enum(['standard','rich']).default('standard'),titlePreference:z.string().trim().max(80).optional() });
+export const accusationSchema = z.object({ suspectId: z.string().min(1), reason: z.string().max(1000).optional().default('') });
+export const safeProgressSchema = z.object({ notes: z.string().max(5000).optional(), reviewedEvidenceIds: z.array(z.string()).optional(), bookmarkedEvidenceIds: z.array(z.string()).optional() });
+const disallowedPremisePatterns=[/\b(real person|real people|based on (my|a real)|actual (person|crime|case))\b/i,/\b(my (neighbor|neighbour|boss|teacher|classmate|coworker|ex|partner|doctor))\b/i,/\b(celebrity|politician|public figure|private address|doxx|surveillance of|real-world allegation)\b/i,/\b(gory|graphic torture|sexual violence|self-harm instructions|how to poison|how to build a bomb)\b/i];
+export function moderatePremise(scenario){return disallowedPremisePatterns.some(pattern=>pattern.test(scenario));}
+export function moderateGeneratedCase(value){const text=JSON.stringify({title:value.title,incident:value.incident,suspects:value.suspects,evidence:value.evidence}).toLowerCase();return disallowedPremisePatterns.some(pattern=>pattern.test(text))||/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i.test(text);}

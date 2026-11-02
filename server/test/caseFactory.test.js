@@ -1,0 +1,4 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { makeCase } from '../src/services/caseFactory.js';
+test('case factory matches difficulty, evidence intensity, timeline, and clue references',()=>{for(const [difficulty,evidenceIntensity,suspects,evidence] of [['easy','standard',3,8],['easy','rich',3,9],['medium','standard',4,9],['medium','rich',4,10],['hard','standard',5,10],['hard','rich',5,12]]){const c=makeCase({scenario:'A fictional mystery about a missing silver compass at a remote museum.',difficulty,evidenceIntensity});assert.equal(c.suspects.length,suspects);assert.equal(c.evidence.length,evidence);assert.ok(c.solution.culpritSuspectId);assert.ok(c.solution.decisiveEvidenceIds.every(id=>c.evidence.some(e=>e.id===id)));assert.ok(c.evidence.every(e=>Date.parse(e.createdAt)&&Number(e.eventTime.slice(0,2))>=19));assert.ok(c.solution.redHerringExplanations.length>=2);}});

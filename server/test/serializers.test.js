@@ -1,0 +1,5 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { safeCase, safeEvidence } from '../src/serializers/caseSerializer.js';
+test('safe case serializer removes secrets and evidence internals',()=>{const x=safeCase({id:'x',ownerId:'private',solution:{culpritSuspectId:'s1'},generation:{provider:'gemini'},title:'Case',evidence:[{id:'e1',internalPurpose:'spoiler'}]});assert.equal(x.solution,undefined);assert.equal(x.generation,undefined);assert.equal(x.ownerId,undefined);assert.equal(x.evidence[0].internalPurpose,undefined);assert.equal(x.title,'Case');});
+test('safe evidence serializer removes internal purpose and nested spoiler fields',()=>{const x=safeEvidence({id:'e1',internalPurpose:'spoiler',title:'Clue',content:{text:'visible',isCulprit:true,details:{solution:'hidden',source:'safe'}}});assert.equal(x.internalPurpose,undefined);assert.equal(x.content.isCulprit,undefined);assert.equal(x.content.details.solution,undefined);assert.equal(x.content.details.source,'safe');assert.equal(x.title,'Clue');});
